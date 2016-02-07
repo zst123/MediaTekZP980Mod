@@ -1,0 +1,72 @@
+
+    private static void fixLaggyCameraOrig(LoadPackageParam lpp) {
+        /* disable capture animation ==> animateCapture()
+         XposedBridge.hookAllMethods(classFeatureSwitcher, "isMtkCaptureAnimationEnable", methodHookReturnFalse); */
+        final Class<?> classCamera = XposedHelpers.findClass("com.android.camera.Camera", lpp.classLoader);
+        XposedBridge.hookAllMethods(classCamera, "animateCapture", XC_MethodReplacement.returnConstant(null));
+    }
+
+
+    //private static void disableEngLog(LoadPackageParam lpp) {
+        // Disable Eng Logging
+            //final Class<?> classLog = XposedHelpers.findClass("com.android.camera.Log", lpp.classLoader);
+
+        //XposedBridge.hookAllMethods(classLog, "isEng", XC_MethodReplacement.returnConstant(Boolean.FALSE));
+    //}
+
+
+    //final Class<?> classZoomManager = XposedHelpers.findClass("com.android.camera.manager.ZoomManager", lpp.classLoader);
+
+        /*  enabled = false can make touch focus faster 300ms than suppot double tap up
+        XposedBridge.hookAllMethods(classFeatureSwitcher, "isSupportDoubleTapUp", methodHookReturnFalse);
+        XposedBridge.hookAllMethods(classZoomManager, "onDoubleTap", methodHookReturnFalse);
+        XC_MethodHook methodHookReturnFalse = new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                super.beforeHookedMethod(param);
+                XposedBridge.log("Camera MTK: "+param.method.getName());
+                param.setResult(Boolean.FALSE);
+            }
+
+        };*/
+
+
+    //thumbnailmanager updateThumbnailView()
+    //final Class<?> classFeatureSwitcher = XposedHelpers.findClass("com.android.camera.FeatureSwitcher", lpp.classLoader);
+
+
+
+
+        final Class<?> classSettingChecker = XposedHelpers.findClass("com.android.camera.manager.ThumbnailManager", lpp.classLoader);
+        XposedBridge.hookAllMethods(classSettingChecker, "updateThumbnailView", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                super.afterHookedMethod(param);
+                if (sPreviewToast != null) {
+                    sPreviewToast.cancel();
+                    //sPreviewToast = null;
+                }
+            }
+        });
+*/
+
+
+
+        /*
+        XposedBridge.hookAllMethods(classCamera, "setCameraState", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                super.afterHookedMethod(param);
+                int resume = (Integer) param.args[0];
+
+                if (resume == 1 && sPreviewToast != null) {
+                    sPreviewToast.cancel();
+                }
+            }
+        });*/
+
+
+    compile project(':StartPointSeekBar')
+
+include ':app', ':StartPointSeekBar'
+project(':StartPointSeekBar').projectDir = new File('app/libs/StartPointSeekBar')

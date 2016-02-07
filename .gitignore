@@ -1,0 +1,11 @@
+bin/
+gen/
+obj/
+libs/*/*.so
+.gradle
+build
+*.iml
+signing.properties
+proguard-project.txt
+project.properties
+.DS_Store
